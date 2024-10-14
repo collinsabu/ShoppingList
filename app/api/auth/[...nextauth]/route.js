@@ -16,8 +16,8 @@ const authOptions = {
     }),
   ],
   pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
+    signIn: "/login",
+    error: "/error",
   },
   callbacks: {
     async jwt({ token, user }) {
