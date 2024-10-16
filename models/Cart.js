@@ -2,12 +2,6 @@
 
 import mongoose from 'mongoose';
 
-// Helper function to parse date in "DD/MM/YYYY" format
-const parseDate = (dateString) => {
-  const [day, month, year] = dateString.split('/');
-  return new Date(`${year}-${month}-${day}`);
-};
-
 // Define the Cart schema
 const cartSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -16,9 +10,7 @@ const cartSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   date: { 
     type: Date, 
-    required: true,
-    // Custom setter to parse the date before saving
-    set: (value) => (typeof value === 'string' ? parseDate(value) : value),
+    required: true, 
   },
   imageUrl: { type: String, required: true },
 });

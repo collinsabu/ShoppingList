@@ -5,47 +5,27 @@ const Modal = ({ isOpen, onClose, item, onAddToCart }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const quantity = e.target.quantity.value;
-    const totalPrice = item.price * quantity;
-    const formattedDate = new Date().toLocaleDateString('en-GB');
-
-    // Ensure `imageUrl` is passed when adding to the cart
-    onAddToCart({ 
-      ...item, 
-      quantity, 
-      totalPrice, 
-      date: formattedDate, 
-      imageUrl: item.imageUrl // Include imageUrl in the payload
-    });
-    onClose(); // Close modal after adding to cart
+    const date = new Date().toISOString(); // Ensuring consistent date format
+    onAddToCart({ ...item, date });
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-11/12 max-w-md">
-        <h2 className="text-lg font-bold mb-4">{item.name}</h2>
-        <img src={item.imageUrl} alt={item.name} className="h-40 w-full object-cover mb-4" />
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h3 className="text-xl font-bold mb-4">Add to Cart</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="quantity" className="block text-gray-700">Quantity:</label>
-            <input
-              type="number"
-              name="quantity"
-              min="1"
-              defaultValue="1"
-              className="border rounded w-full p-2"
-            />
+            <label className="block text-gray-700">Quantity:</label>
+            <input type="number" min="1" className="w-full border border-gray-300 p-2 rounded" />
           </div>
-          <button type="submit" className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition-all">
-            Add to Cart
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="ml-2 text-gray-700 underline hover:text-gray-900"
-          >
-            Close
-          </button>
+          <div className="flex justify-end">
+            <button type="button" onClick={onClose} className="mr-4 bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded">
+              Add to Cart
+            </button>
+          </div>
         </form>
       </div>
     </div>
