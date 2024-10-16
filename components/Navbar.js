@@ -1,39 +1,49 @@
+// components/Navbar.js
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { AiOutlineShoppingCart } from "react-icons/ai"; // Import shopping cart icon
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
-import SignOut from "@/components/SignOut"; // Import the SignOut component (ensure it's correct)
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { motion, AnimatePresence } from "framer-motion";
+import SignOut from "@/components/SignOut";
 
 const Navbar = () => {
   const [cartItemCount, setCartItemCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch total cart items from the database
     const fetchCartItemCount = async () => {
       try {
-        const response = await fetch("/api/cart-count"); // API route to get total cart count
+        const response = await fetch("/api/cart-count", {
+          headers: { 'Cache-Control': 'no-store' } // Prevent client-side caching
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        setCartItemCount(data.totalItems);
+        console.log("Fetched cart count:", data.totalItems); // Log the response data for debugging
+        setCartItemCount(data.totalItems); // Ensure the key `totalItems` is correct
       } catch (error) {
         console.error("Error fetching cart item count:", error);
       }
     };
 
+    // Initial fetch on mount
     fetchCartItemCount();
+
+    // Poll for cart item count every 5 seconds
+    const interval = setInterval(fetchCartItemCount, 5000);
+
+    // Cleanup interval when the component unmounts
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <nav className="bg-purple-600 p-4 text-white fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Left section: Logo and title */}
         <div className="flex items-center">
           <Link href="/" className="text-xl font-bold">
             Shopping App
           </Link>
-
-          {/* Shopping Cart Icon with item count */}
           <div className="relative ml-4">
             <Link
               href="/cart"
@@ -49,7 +59,25 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile menu icon */}
+        <div className="hidden md:flex space-x-4">
+          <Link href="/" className="hover:text-purple-300 transition-colors">
+            Home
+          </Link>
+          <Link href="/add-item" className="hover:text-purple-300 transition-colors">
+            Add Item
+          </Link>
+          <Link href="/mealplanner" className="hover:text-purple-300 transition-colors">
+            Meal Planner
+          </Link>
+          <Link href="/mealmenu" className="hover:text-purple-300 transition-colors">
+            Meal Menu
+          </Link>
+          <Link href="/cart" className="hover:text-purple-300 transition-colors">
+            Cart Items
+          </Link>
+          <SignOut />
+        </div>
+
         <button
           className="block md:hidden text-white"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -70,15 +98,14 @@ const Navbar = () => {
           </svg>
         </button>
 
-        {/* Right section: Menu */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }} // Starting state
-              animate={{ opacity: 1, y: 0 }} // Animate to this state
-              exit={{ opacity: 0, y: -20 }} // Exit state
-              transition={{ duration: 0.3 }} // Animation duration
-              className=" flex flex-col absolute top-16 right-4 bg-purple-600 p-4 rounded-lg shadow-lg space-y-4 z-10" // Adjusted space-y to space-y-4 for more margin
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col text-center absolute top-16 right-4 bg-purple-600 p-4 rounded-lg shadow-lg space-y-4 z-10"
             >
               <Link href="/" className="hover:text-purple-300 transition-colors text-center ">
                 Home
@@ -86,7 +113,16 @@ const Navbar = () => {
               <Link href="/add-item" className="hover:text-purple-300 transition-colors text-center">
                 Add Item
               </Link>
-              <SignOut /> {/* Add the SignOut button here */}
+              <Link href="/mealplaner" className="hover:text-purple-300 transition-colors text-center">
+                Meal Planner
+              </Link>
+              <Link href="/mealmenu" className="hover:text-purple-300 transition-colors text-center">
+                Meal Menu
+              </Link>
+              <Link href="/cart" className="hover:text-purple-300 transition-colors text-center">
+                Cart Items
+              </Link>
+              <SignOut />
             </motion.div>
           )}
         </AnimatePresence>

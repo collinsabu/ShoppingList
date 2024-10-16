@@ -91,7 +91,7 @@ const AddItemForm = () => {
             />
           </div>
 
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+          <button type="submit" className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
             Add Item
           </button>
         </form>

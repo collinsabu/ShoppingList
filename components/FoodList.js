@@ -102,7 +102,7 @@ const FoodList = () => {
 
   return (
     <div className="min-h-screen bg-[#9E7BB3] p-6">
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto text-center ">
         <h2 className="text-xl font-bold text-white mb-6">Available Food Items</h2>
         {error && <p className="text-red-600">{error}</p>}
         {isLoading ? (
@@ -111,7 +111,7 @@ const FoodList = () => {
             <p className="text-white mt-4">Loading items...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-16">
             {items.map((item) => (
               <div key={item._id} className="bg-white border border-purple-300 p-4 rounded-lg shadow-lg relative">
                 <img
