@@ -111,17 +111,20 @@ const FoodList = () => {
     }
   };
 
+  // Updated function to handle adding to cart with correct date format
   const handleAddToCart = async (e) => {
     e.preventDefault();
 
-    const formattedDate = new Date().toLocaleDateString('en-GB');
+    // Use the current date in ISO format
+    const formattedDate = new Date().toISOString(); // This produces a valid ISO date string
+
     const totalPrice = selectedItem.price * quantity;
 
     const cartItem = {
       ...selectedItem,
       quantity,
       totalPrice,
-      date: formattedDate,
+      date: formattedDate, // Send the ISO date string
     };
 
     try {
